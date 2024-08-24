@@ -101,28 +101,34 @@ def get_merged_config(**options):
     #  talk to supervisord.  It's passworded based on secret key.
     #  If they have configured a unix socket then use that, otherwise
     #  use an inet server on localhost at fixed-but-randomish port.
-    username = hashlib.md5(settings.SECRET_KEY).hexdigest()[:7]
-    password = hashlib.md5(username).hexdigest()
+    import hashlib
+
+    # 将 settings.SECRET_KEY 编码为字节类型
+    username = hashlib.md5(settings.SECRET_KEY.encode('utf-8')).hexdigest()[:7]
+
+    # 将 username 编码为字节类型
+    password = hashlib.md5(username.encode('utf-8')).hexdigest()
+
     if cfg.has_section("unix_http_server"):
-        set_if_missing(cfg,"unix_http_server","username",username)
-        set_if_missing(cfg,"unix_http_server","password",password)
-        serverurl = "unix://" + cfg.get("unix_http_server","file")
+        set_if_missing(cfg, "unix_http_server", "username", username)
+        set_if_missing(cfg, "unix_http_server", "password", password)
+        serverurl = "unix://" + cfg.get("unix_http_server", "file")
     else:
-        #  This picks a "random" port in the 9000 range to listen on.
-        #  It's derived from the secret key, so it's stable for a given
-        #  project but multiple projects are unlikely to collide.
-        port = int(hashlib.md5(password).hexdigest()[:3],16) % 1000
+        # 生成稳定但随机的端口号
+        port = int(hashlib.md5(password.encode('utf-8')).hexdigest()[:3], 16) % 1000
         addr = "127.0.0.1:9%03d" % (port,)
-        set_if_missing(cfg,"inet_http_server","port",addr)
-        set_if_missing(cfg,"inet_http_server","username",username)
-        set_if_missing(cfg,"inet_http_server","password",password)
-        serverurl = "http://" + cfg.get("inet_http_server","port")
-    set_if_missing(cfg,"supervisorctl","serverurl",serverurl)
-    set_if_missing(cfg,"supervisorctl","username",username)
-    set_if_missing(cfg,"supervisorctl","password",password)
-    set_if_missing(cfg,"rpcinterface:supervisor",
-                       "supervisor.rpcinterface_factory",
-                       "supervisor.rpcinterface:make_main_rpcinterface")
+        set_if_missing(cfg, "inet_http_server", "port", addr)
+        set_if_missing(cfg, "inet_http_server", "username", username)
+        set_if_missing(cfg, "inet_http_server", "password", password)
+        serverurl = "http://" + cfg.get("inet_http_server", "port")
+
+    set_if_missing(cfg, "supervisorctl", "serverurl", serverurl)
+    set_if_missing(cfg, "supervisorctl", "username", username)
+    set_if_missing(cfg, "supervisorctl", "password", password)
+    set_if_missing(cfg, "rpcinterface:supervisor",
+                "supervisor.rpcinterface_factory",
+                "supervisor.rpcinterface:make_main_rpcinterface")
+
     #  Remove any [program:] sections with exclude=true
     for section in cfg.sections():
         try:
