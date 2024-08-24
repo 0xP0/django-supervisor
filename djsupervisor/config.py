@@ -234,7 +234,7 @@ def rerender_options(options):
     key in the options dictionary.
     """
     args = []
-    for name,value in options.iteritems():
+    for name,value in options.items():
         name = name.replace("_","-")
         if value is None:
             pass
