@@ -216,7 +216,7 @@ class Command(BaseCommand):
         """Command 'supervisor getconfig' prints merged config to stdout."""
         if args:
             raise CommandError("supervisor getconfig takes no arguments")
-        print cfg_file.read()
+        print(cfg_file.read())
         return 0
 
     def _handle_autoreload(self,cfg_file,*args,**options):
