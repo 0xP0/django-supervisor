@@ -65,10 +65,14 @@ def get_merged_config(**options):
     cfg = RawConfigParser()
     #  Start from the default configuration options.
     data = render_config(DEFAULT_CONFIG,ctx)
+    if isinstance(data, bytes):
+        data = data.decode('utf-8')
     cfg.readfp(StringIO(data))
     #  Add in the project-specific config file.
     with open(config_file,"r") as f:
         data = render_config(f.read(),ctx)
+    if isinstance(data, bytes):
+        data = data.decode('utf-8')
     cfg.readfp(StringIO(data))
     #  Add in the options specified on the command-line.
     cfg.readfp(StringIO(get_config_from_options(**options)))
