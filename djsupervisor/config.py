@@ -17,9 +17,9 @@ import hashlib
 try:
     from cStringIO import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
-from ConfigParser import RawConfigParser, NoSectionError, NoOptionError
+from configparser import RawConfigParser, NoSectionError, NoOptionError
 
 from django import template
 from django.conf import settings
