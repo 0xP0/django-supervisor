@@ -357,7 +357,9 @@ class OnDemandStringIO(object):
         self.callback = callback
         self.args = args
         self.kwds = kwds
-
+        
+    def __iter__(self):
+        return iter(self.fp)
     @property
     def fp(self):
         if self._fp is None:
