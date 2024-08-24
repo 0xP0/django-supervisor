@@ -33,7 +33,7 @@ from configparser import RawConfigParser, NoOptionError
 try:
     from cStringIO import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 from supervisor import supervisord, supervisorctl
 
