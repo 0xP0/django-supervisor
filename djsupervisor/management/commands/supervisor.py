@@ -29,7 +29,7 @@ import os
 import time
 from textwrap import dedent
 import traceback
-from ConfigParser import RawConfigParser, NoOptionError
+from configparser import RawConfigParser, NoOptionError
 try:
     from cStringIO import StringIO
 except ImportError:
