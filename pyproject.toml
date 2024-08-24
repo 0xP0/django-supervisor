@@ -18,6 +18,8 @@ dependencies = [
     "Django>=3.0",
     "supervisor>=4.0",
     "watchdog>=2.0",
+
+    "configparser>=^7.1.0",
 ]
 
 # 如果需要开发时依赖项（可选）
